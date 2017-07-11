@@ -1,30 +1,38 @@
 def main():
 	darkest_data = parseFile("test.darkest")
+	# darkest_data = parseString(
+	# 	'riposte_skill: .id "riposte1" .level 0 .type "melee" .atk 120% .dmg 6 8 .crit 12% .launch 1234 .target 1234 .is_crit_valid True')
 	displayDarkest(darkest_data)
 
 
 def parseFile(filename):
-	output_dict = {}
 	with open(filename) as data_file:
 		content = data_file.readlines()
-		for line in content:
-			category_data = line.split()
-			category_dict = {}
-			key = None
-			values = []
-			for x in range(1, len(category_data)):
-				if category_data[x].strip().startswith('.'):
-					key = category_data[x].strip()[1:]
-				else:
-					values.append(category_data[x].strip())
-				if (x + 1) < len(category_data) and category_data[x + 1].strip().startswith('.'):
-					category_dict[key] = values
-					values = []
-			category_dict[key] = values
-			category = category_data[0].strip()
-			output_dict[category[:len(category) - 1]] = category_dict
-	cleanupDict(output_dict)
-	return output_dict
+		darkest_data = parseString(''.join(content).strip())
+	return darkest_data
+
+
+def parseString(data_string):
+	darkest_data = dict()
+	lines = data_string.split('\n')
+	for line in lines:
+		category_data = line.split()
+		category_dict = {}
+		key = None
+		values = []
+		for x in range(1, len(category_data)):
+			if category_data[x].strip().startswith('.'):
+				key = category_data[x].strip()[1:]
+			else:
+				values.append(category_data[x].strip())
+			if (x + 1) < len(category_data) and category_data[x + 1].strip().startswith('.'):
+				category_dict[key] = values
+				values = []
+		category_dict[key] = values
+		category = category_data[0].strip()
+		darkest_data[category[:len(category) - 1]] = category_dict
+	cleanupDict(darkest_data)
+	return darkest_data
 
 
 def cleanupDict(darkest_data):
