@@ -23,7 +23,37 @@ def parseFile(filename):
 			category_dict[key] = values
 			category = category_data[0].strip()
 			output_dict[category[:len(category) - 1]] = category_dict
+	cleanupDict(output_dict)
 	return output_dict
+
+
+def cleanupDict(darkest_data):
+	for category, category_values in darkest_data.items():
+		for sub_category, values in category_values.items():
+			darkest_data[category].update(
+				{sub_category: cleanupValues(values)})
+
+
+def cleanupValues(values):
+	if isinstance(values[0], str):
+		if len(values) > 1 and values[0].startswith('"') and not values[1].startswith('"'):
+			temp = ' '.join(values)
+			values = []
+			values.append(temp)
+	values = [str(x).strip('"') for x in values]
+	return [setType(value) for value in values]
+
+
+def setType(value):
+	try:
+		if value == str(float(value)):
+			return float(value)
+		return int(value)
+	except ValueError:
+		if value == 'True' or value == 'False':
+			return value == 'True'
+		else:
+			return str(value)
 
 
 def displayDarkest(darkest_data):
@@ -32,7 +62,7 @@ def displayDarkest(darkest_data):
 		for sub_category, values in category_values.items():
 			print('\t' + sub_category)
 			for value in values:
-				print('\t\t' + value)
+				print('\t\t' + str(value))
 
 
 if __name__ == '__main__':
