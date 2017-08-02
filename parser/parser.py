@@ -1,10 +1,3 @@
-def main():
-	darkest_data = parseFile("test.darkest")
-	# darkest_data = parseString(
-	# 	'riposte_skill: .id "riposte1" .level 0 .type "melee" .atk 120% .dmg 6 8 .crit 12% .launch 1234 .target 1234 .is_crit_valid True')
-	displayDarkest(darkest_data)
-
-
 def parseFile(filename):
 	with open(filename) as data_file:
 		content = data_file.readlines()
@@ -71,7 +64,3 @@ def displayDarkest(darkest_data):
 			print('\t' + sub_category)
 			for value in values:
 				print('\t\t' + str(value))
-
-
-if __name__ == '__main__':
-	main()
