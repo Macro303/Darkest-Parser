@@ -1,1 +1,1 @@
-from .parser import parseFile
+from parser.parser import *

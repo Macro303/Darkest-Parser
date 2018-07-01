@@ -1,11 +1,11 @@
-def parseFile(filename):
+def parse_file(filename):
 	with open(filename) as data_file:
 		content = data_file.readlines()
-		darkest_data = parseString(''.join(content).strip())
+		darkest_data = parse_string(''.join(content).strip())
 	return darkest_data
 
 
-def parseString(data_string):
+def parse_string(data_string):
 	darkest_data = dict()
 	lines = data_string.split('\n')
 	for line in lines:
@@ -24,28 +24,27 @@ def parseString(data_string):
 		category_dict[key] = values
 		category = category_data[0].strip()
 		darkest_data[category[:len(category) - 1]] = category_dict
-	cleanupDict(darkest_data)
+	cleanup_dict(darkest_data)
 	return darkest_data
 
 
-def cleanupDict(darkest_data):
+def cleanup_dict(darkest_data):
 	for category, category_values in darkest_data.items():
 		for sub_category, values in category_values.items():
 			darkest_data[category].update(
-				{sub_category: cleanupValues(values)})
+				{sub_category: cleanup_values(values)})
 
 
-def cleanupValues(values):
+def cleanup_values(values):
 	if isinstance(values[0], str):
 		if len(values) > 1 and values[0].startswith('"') and not values[1].startswith('"'):
 			temp = ' '.join(values)
-			values = []
-			values.append(temp)
+			values = [temp]
 	values = [str(x).strip('"') for x in values]
-	return [setType(value) for value in values]
+	return [set_type(value) for value in values]
 
 
-def setType(value):
+def set_type(value):
 	try:
 		if value == str(float(value)):
 			return float(value)
@@ -57,7 +56,7 @@ def setType(value):
 			return str(value)
 
 
-def displayDarkest(darkest_data):
+def display_darkest(darkest_data):
 	for category, category_values in darkest_data.items():
 		print(category)
 		for sub_category, values in category_values.items():
